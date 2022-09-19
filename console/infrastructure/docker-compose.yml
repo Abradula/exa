@@ -1,0 +1,49 @@
+version: '3.3'
+networks:
+  default:
+    external:
+      name: dpod-network
+
+services:
+  zhil-db:
+    container_name: zhil-db
+    image: mongo:4.0
+#    networks:
+#      - openhim
+    volumes:
+      - "mongo-data:/data/db"
+    restart: unless-stopped
+
+  zhil-core:
+    container_name: zhil-core
+    image: jembi/openhim-core:latest
+    restart: unless-stopped
+    environment:
+      mongo_url: "mongodb://zhil-db/openhim-dev"
+      mongo_atnaUrl: "mongodb://zhil-db/openhim-dev"
+      NODE_ENV: "production"
+    ports:
+      - "8080:8080"
+      - "6000:5000"
+      - "6001:5001"
+    volumes:
+      - ./core-config:/app/config
+      - /etc/letsencrypt:/etc/letsencrypt
+ #   networks:
+ #     - openhim
+
+  zhil-console:
+    container_name: zhil-console
+    image: joasjaphes/openhim:latest
+#    build:
+#      context: .
+    restart: unless-stopped
+ #   networks:
+ #     - openhim
+    # ports:
+    #   - "9090:80"
+    volumes:
+      - ./console-config/default.json:/usr/share/nginx/html/config/default.json
+
+volumes:
+  mongo-data:

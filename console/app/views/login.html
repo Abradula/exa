@@ -1,0 +1,67 @@
+<div class="bg-login"></div>
+<div class="login-cover row">
+  <div style="height: 20%; width: 26%; display: flex; align-items: center;" class="col-sm-12">
+    <img src="../images/coat-of-arms-znz.png" height="60px" width="100px" alt="">&nbsp;
+    <div>
+      <div style="font-weight: bolder; font-size: 13px; color: white;">Zanzibar Health Interoperability Layer</div>
+      <div style="height: 1px; background-color:white; width: 100%;"></div>
+      <div style="font-weight: bolder; font-size: 12px; color: white;">Ministry of Health Zanzibar</div>
+    </div>
+  </div>
+  <div style="width: 1px; background-color: white; height: 40%; margin-left: 20px; margin-right: 20px;"
+    class="col-sm-12"></div>
+  <div style="height: 50%; width: 40%;" class="col-sm-12" ng-if="!rootPasswordReset">
+    <form ng-submit="validateLogin(loginEmail, loginPassword)">
+      <div align="center" style="width: 60%;">
+        <img src="../images/user.png" alt="" height="100px" width="100px">
+      </div>
+      <div>
+        <div class="input-box">
+          <i class="glyphicon glyphicon-user"></i>&nbsp;
+          <div style="width: 1px; background-color:black; height: 15px; margin-left: 5px; margin-right: 5px;"></div>
+          <input type="text" class="login-input" ng-model="loginEmail" placeholder="Email">
+        </div>
+        <div class="input-box">
+          <i class="glyphicon glyphicon-lock"></i>&nbsp;
+          <div style="width: 1px; background-color:black; height: 15px; margin-left: 5px; margin-right: 5px;"></div>
+          <input type="{{passwordInputType}}" class="login-input" ng-model="loginPassword"
+            placeholder="Password">
+          <i class="glyphicon glyphicon-eye-open" style="cursor: pointer;" ng-click="passwordToggle()"
+            ng-show="viewPassword"></i>
+          <i class="glyphicon glyphicon-eye-close" style="cursor: pointer;" ng-click="passwordToggle()"
+            ng-hide="viewPassword"></i>
+        </div>
+        <div style="margin-top: 10px; width: 60%;" align="right">
+          <a href="#!/forgot-password/{{ linkUserEmail }}">Forgot your password?</a>
+        </div>
+        <div style="width: 60%;">
+          <div uib-alert ng-repeat="alert in alerts.login" ng-class="'alert-' + (alert.type || 'warning')">
+            {{alert.msg}}</div>
+          <div uib-alert ng-repeat="alert in alerts.server" ng-class="'alert-' + (alert.type || 'warning')">
+            {{alert.msg}}</div>
+        </div>
+        <div style="margin-top: 20px; width: 100%;">
+          <input type="submit" style="width: 60%;" class="btn btn-primary" value="Login">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div style="height: 50%; width: 40%;" class="col-sm-12" ng-show="rootPasswordReset">
+    <h6>Root Password Reset</h6>
+    <p><u><strong>Please change your default root password!</strong></u></p>
+    <form ng-submit="resetRootPassword()">
+      <input ng-show="!resetSuccess" class="form-control" type="password" ng-model="password" placeholder="New Password"
+        focus="true">
+      <input ng-show="!resetSuccess" class="form-control" type="password" ng-model="passwordConfirm"
+        placeholder="Confirm Password">
+      <div uib-alert ng-repeat="alert in alerts.login" ng-class="'alert-' + (alert.type || 'warning')">
+        {{alert.msg}}</div>
+      <div uib-alert ng-repeat="alert in alerts.server" ng-class="'alert-' + (alert.type || 'warning')">
+        {{alert.msg}}</div>
+
+      <div class="action" ng-show="!resetSuccess">
+        <input type="submit" class="btn btn-primary signup" value="RESET" />
+      </div>
+    </form>
+  </div>
+</div>

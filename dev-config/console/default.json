@@ -1,0 +1,14 @@
+{
+    "version": "1.14.4",
+    "minimumCoreVersion": "5.0.0",
+    "protocol": "http",
+    "host": "openhim-core",
+    "hostPath": "",
+    "port": 8080,
+    "title": "ZHIL",
+    "footerTitle": "Zanzibar Health Interoperability Layer",
+    "footerPoweredBy": "<a href='#' target='_blank'>Powered by Zanzibar Ministry Of Health</a>",
+    "loginBanner": "",
+    "mediatorLastHeartbeatWarningSeconds": 60,
+    "mediatorLastHeartbeatDangerSeconds": 120
+}

@@ -1,0 +1,52 @@
+version: '3'
+networks:
+  openhim:
+
+
+services:
+  zhil-db:
+    container_name: zhil-db
+    image: mongo:4.0
+    volumes:
+      - "mongo-data:/data/db"
+    restart: unless-stopped
+
+  zhil-core:
+    container_name: zhil-core
+    image: jembi/openhim-core:latest
+    restart: unless-stopped
+    environment:
+      mongo_url: "mongodb://zhil-db/openhim"
+      mongo_atnaUrl: "mongodb://zhil-db/openhim"
+      NODE_ENV: "production"
+    ports:
+      - "8080:8080"
+      - "6000:5000"
+      - "6001:5001"
+    volumes:
+      - ./config/core:/app/config
+
+  zhil-console:
+    container_name: zhil-console
+    image: joasjaphes/openhim:latest
+    # build:
+    #   context: .
+    restart: unless-stopped
+    ports:
+      - "9090:80"
+    volumes:
+      - ./config/console/default.json:/usr/share/nginx/html/config/default.json
+
+  zanemr-mediator:
+    container_name: zanemr-mediator
+    image: joasjaphes/zanemr-mediator:latest
+    restart: always
+    environment:
+      CONFIG: "/conf"
+    ports:
+      - '8088:3000'
+    volumes:
+      - ./config/mediators/zanemr:/conf
+
+volumes:
+  mongo-data:

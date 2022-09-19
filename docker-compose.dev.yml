@@ -1,0 +1,69 @@
+version: '3'
+networks:
+  openhim:
+
+
+services:
+  mongo-db:
+    container_name: mongo-db
+    image: mongo:4.0
+    volumes:
+      - "mongo-data:/data/db"
+    restart: unless-stopped
+
+  openhim-core:
+    container_name: openhim-core
+    image: node:14.17-alpine
+    restart: unless-stopped
+    working_dir: /home/app
+    command: sh -c "npm install && npm run start"
+    environment:
+      mongo_url: "mongodb://mongo-db/openhim"
+      mongo_atnaUrl: "mongodb://mongo-db/openhim"
+      NODE_ENV: "production"
+    # network_mode: 'host'
+    ports:
+      - "8080:8080"
+      - "6000:5000"
+      - "6001:5001"
+    volumes:
+      - ./dev-config/core:/home/app/config
+      - ./core/api:/home/app
+    depends_on:
+      - mongo-db
+    # networks:
+    #   - openhim
+
+  openhim-console:
+    container_name: openhim-console
+    image: node:14.17-alpine
+    restart: unless-stopped
+    #entrypoint: ""
+    command: npm run start:dev
+    working_dir: /home/app
+    # networks:
+    #   - openhim
+    network_mode: 'host'
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./dev-config/console/default.json:/home/app/config/default.json
+      - ./console:/home/app
+  zanemr-mediator:
+    container_name: zanemr-mediator
+    image: node:16-alpine
+    working_dir: /home/app
+    restart: always
+    environment:
+      CONFIG: "/conf"
+    command: npm run start:dev
+    networks:
+      - openhim
+    ports:
+      - '8088:3000'
+    volumes:
+      - ./core/mediators/zanemr:/home/app
+      - ./dev-config/mediators/zanemr:/conf
+
+volumes:
+  mongo-data:
